@@ -2,3 +2,28 @@
 	background-color: rgb(30, 30, 30);
 	outline: 3px solid rgb(30, 30, 30);
 }
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	font-family: Helvetica;
+	font-weight: 100;
+}
+
+.buttons {
+	margin: 10px;
+}
+
+.buttons label,
+.buttons button {
+	margin-left: 50px;
+}
+
+.buttons button {
+	font-size: 16px;
+	font-family: Helvetica;
+	font-weight: 100;
+}

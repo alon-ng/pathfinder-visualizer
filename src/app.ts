@@ -23,6 +23,8 @@ class Simualator {
 			}
 		}
 
+		this.removeOverflowCanvas();
+
 		this.start = this.cells[0][0];
 		this.start.type = CellType.Start;
 		this.target = this.cells[this.cells.length - 1][this.cells[0].length - 1];
@@ -120,9 +122,9 @@ class Simualator {
 
 				index.x > 0 && tryVisitCell(simulator.cells[index.y][index.x - 1], cell.value + 1);
 				index.y > 0 && tryVisitCell(simulator.cells[index.y - 1][index.x], cell.value + 1);
-				index.x < Math.floor(canvas.width / (CELL_SIZE + CELL_GAP)) - 1 &&
+				index.x < Math.floor(canvas.width / (CELL_SIZE + CELL_GAP)) &&
 					tryVisitCell(simulator.cells[index.y][index.x + 1], cell.value + 1);
-				index.y < Math.floor(canvas.height / (CELL_SIZE + CELL_GAP)) - 1 &&
+				index.y < Math.floor(canvas.height / (CELL_SIZE + CELL_GAP)) &&
 					tryVisitCell(simulator.cells[index.y + 1][index.x], cell.value + 1);
 			}
 			simulator.renderCells();
@@ -200,6 +202,13 @@ class Simualator {
 				}
 			}
 		}
+	}
+
+	removeOverflowCanvas() {
+		let height = this.cells.length * (CELL_SIZE + CELL_GAP);
+		let width = this.cells[0].length * (CELL_SIZE + CELL_GAP);
+		this.canvas.height = height - 2;
+		this.canvas.width = width - 2;
 	}
 }
 
