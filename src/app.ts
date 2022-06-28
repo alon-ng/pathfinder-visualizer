@@ -99,6 +99,7 @@ class Simualator {
 	}
 
 	simulateDijkstraAlgorithm() {
+		this.resetCells();
 		let interval = setInterval(step, 100);
 		setTimeout(() => clearInterval(interval), 10000);
 		this.start.value = 0;
@@ -184,7 +185,20 @@ class Simualator {
 					simulator.cells[i][j].isVisited = false;
 				}
 			}
+
 			simulator.renderCells();
+		}
+	}
+
+	resetCells() {
+		for (let i = 0; i < this.cells.length; i++) {
+			for (let j = 0; j < this.cells[i].length; j++) {
+				this.cells[i][j].isVisited = false;
+				this.cells[i][j].value = -1;
+				if (this.cells[i][j].type === CellType.Path) {
+					this.cells[i][j].type = CellType.Empty;
+				}
+			}
 		}
 	}
 }
