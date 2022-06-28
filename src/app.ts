@@ -1,5 +1,5 @@
 import { Cell } from "./shared/Cell";
-import { CELL_SIZE, CELL_GAP, CellType, Action } from "./shared/global-variables";
+import { CELL_SIZE, CELL_GAP, CellType, Action, Color } from "./shared/global-variables";
 
 class Simualator {
 	canvas: HTMLCanvasElement;
@@ -103,15 +103,17 @@ class Simualator {
 	simulateDijkstraAlgorithm() {
 		this.resetCells();
 		let interval = setInterval(step, 100);
-		setTimeout(() => clearInterval(interval), 10000);
 		this.start.value = 0;
 		let nextCells = [this.start];
 		this.start.isVisited = true;
 		let simulator = this;
 
 		function step() {
+			// If no more steps available stop the clear the interval
+			if (nextCells.length === 0) clearInterval(interval);
 			const cellsToCheck = [...nextCells];
 			nextCells = [];
+
 			for (const cell of cellsToCheck) {
 				if (cell.type === CellType.Target) {
 					clearInterval(interval);
@@ -134,6 +136,7 @@ class Simualator {
 			if (cell.type !== CellType.Wall && !cell.isVisited) {
 				cell.isVisited = true;
 				cell.value = value;
+				cell.render(Color.Purple);
 				nextCells.push(cell);
 			}
 		}

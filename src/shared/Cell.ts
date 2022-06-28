@@ -19,16 +19,16 @@ export class Cell {
 		this.value = -1;
 	}
 
-	render(): void {
+	render(color?: Color): void {
 		this.ctx.beginPath();
-		this.ctx.fillStyle = this.getCellColor();
+		this.ctx.fillStyle = color ? color : this.getCellColor();
 
 		this.ctx.fillRect(this.x, this.y, CELL_SIZE, CELL_SIZE);
 		this.ctx.stroke();
 	}
 
 	getCellColor(): Color {
-		if (this.isVisited) return Color.Aqua;
+		if (this.isVisited) return Color.AquaLightAlpha;
 		switch (this.type) {
 			case CellType.Empty:
 				return Color.White;

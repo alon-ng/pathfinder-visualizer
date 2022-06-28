@@ -6,7 +6,9 @@ export enum Color {
 	Black = "rgb(30, 30, 30)",
 	Red = "rgb(200, 0, 0)",
 	Green = "rgb(25, 130, 10)",
-	Aqua = "rgb(0, 180, 200)",
+	Aqua = "rgba(0, 180, 200)",
+	AquaLightAlpha = "rgba(140, 205, 255, 0.2)",
+	Purple = "rgb(255, 100, 255)",
 	Gold = "rgb(200, 140, 20)",
 }
 
