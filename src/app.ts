@@ -1,11 +1,13 @@
 import { Cell } from "./shared/Cell";
-import { CELL_SIZE, CELL_GAP, CellType } from "./shared/global-variables";
+import { CELL_SIZE, CELL_GAP, CellType, Action } from "./shared/global-variables";
 
 class Pathfinder {
 	canvas: HTMLCanvasElement;
 	ctx: CanvasRenderingContext2D;
 	cells: Cell[][];
 	isMouseDown: boolean;
+	start: Cell;
+	target: Cell;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
@@ -21,6 +23,11 @@ class Pathfinder {
 			}
 		}
 
+		this.start = this.cells[0][0];
+		this.start.type = CellType.Start;
+		this.target = this.cells[this.cells.length - 1][this.cells[0].length - 1];
+		this.target.type = CellType.Target;
+
 		canvas.addEventListener("mousemove", (event) => this.handleMosueMove(event));
 		canvas.addEventListener("mousedown", () => (this.isMouseDown = true));
 		canvas.addEventListener("mouseup", () => (this.isMouseDown = false));
@@ -33,7 +40,32 @@ class Pathfinder {
 	handleMosueMove(event: MouseEvent) {
 		const cell = this.getClickedOnCell(event);
 		if (this.isMouseDown && cell) {
-			cell.type = CellType.Wall;
+			const action = (document.querySelector('input[name="action"]:checked')! as HTMLInputElement).value;
+			console.log(action);
+
+			if (action === Action.DrawWalls) {
+				if (cell.type !== CellType.Start && cell.type != CellType.Target) {
+					cell.type = CellType.Wall;
+				}
+			} else if (action === Action.SetStart) {
+				if (cell.type !== CellType.Target) {
+					this.start.type = CellType.Empty;
+					this.start.render();
+					this.start = cell;
+					this.start.type = CellType.Start;
+				}
+			} else if (action === Action.SetTarget) {
+				if (cell.type !== CellType.Start) {
+					this.target.type = CellType.Empty;
+					this.target.render();
+					this.target = cell;
+					this.target.type = CellType.Target;
+				}
+			} else if (action === Action.Clear) {
+				if (cell.type !== CellType.Start && cell.type != CellType.Target) {
+					cell.type = CellType.Empty;
+				}
+			}
 			cell.render();
 		}
 	}

@@ -14,3 +14,10 @@ export enum CellType {
 	Start,
 	Target,
 }
+
+export enum Action {
+	DrawWalls = "draw-walls",
+	SetStart = "set-start",
+	SetTarget = "set-target",
+	Clear = "clear",
+}
