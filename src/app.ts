@@ -1,7 +1,7 @@
 import { Cell } from "./shared/Cell";
 import { CELL_SIZE, CELL_GAP, CellType, Action } from "./shared/global-variables";
 
-class Pathfinder {
+class Simualator {
 	canvas: HTMLCanvasElement;
 	ctx: CanvasRenderingContext2D;
 	cells: Cell[][];
@@ -44,7 +44,6 @@ class Pathfinder {
 		const cell = this.getClickedOnCell(event);
 		if (this.isMouseDown && cell) {
 			const action = (document.querySelector('input[name="action"]:checked')! as HTMLInputElement).value;
-			console.log(action);
 
 			if (action === Action.DrawWalls) {
 				if (cell.type !== CellType.Start && cell.type != CellType.Target) {
@@ -98,11 +97,101 @@ class Pathfinder {
 			}
 		}
 	}
+
+	simulateDijkstraAlgorithm() {
+		let interval = setInterval(step, 100);
+		setTimeout(() => clearInterval(interval), 10000);
+		this.start.value = 0;
+		let nextCells = [this.start];
+		this.start.isVisited = true;
+		let simulator = this;
+
+		function step() {
+			const cellsToCheck = [...nextCells];
+			nextCells = [];
+			for (const cell of cellsToCheck) {
+				if (cell.type === CellType.Target) {
+					clearInterval(interval);
+					drawPath();
+					return;
+				}
+				let index = cell.index;
+
+				index.x > 0 && tryVisitCell(simulator.cells[index.y][index.x - 1], cell.value + 1);
+				index.y > 0 && tryVisitCell(simulator.cells[index.y - 1][index.x], cell.value + 1);
+				index.x < Math.floor(canvas.width / (CELL_SIZE + CELL_GAP)) - 1 &&
+					tryVisitCell(simulator.cells[index.y][index.x + 1], cell.value + 1);
+				index.y < Math.floor(canvas.height / (CELL_SIZE + CELL_GAP)) - 1 &&
+					tryVisitCell(simulator.cells[index.y + 1][index.x], cell.value + 1);
+			}
+			simulator.renderCells();
+		}
+
+		function tryVisitCell(cell: Cell, value: number) {
+			if (cell.type !== CellType.Wall && !cell.isVisited) {
+				cell.isVisited = true;
+				cell.value = value;
+				nextCells.push(cell);
+			}
+		}
+
+		function drawPath() {
+			let path: Cell[] = [simulator.target];
+			let top = path[path.length - 1];
+
+			while (top.type !== CellType.Start) {
+				top.type = CellType.Path;
+				let index = top.index;
+
+				let minCell = new Cell(-1, -1, simulator.ctx);
+				minCell.value = Infinity;
+
+				if (index.x > 0) {
+					let cell = simulator.cells[index.y][index.x - 1];
+					if (cell.value !== -1 && cell.value < minCell.value) {
+						minCell = cell;
+					}
+				}
+
+				if (index.y > 0) {
+					let cell = simulator.cells[index.y - 1][index.x];
+					if (cell.value !== -1 && cell.value < minCell.value) {
+						minCell = cell;
+					}
+				}
+
+				if (index.x < Math.floor(canvas.width / (CELL_SIZE + CELL_GAP)) - 1) {
+					let cell = simulator.cells[index.y][index.x + 1];
+					if (cell.value !== -1 && cell.value < minCell.value) {
+						minCell = cell;
+					}
+				}
+
+				if (index.y < Math.floor(canvas.height / (CELL_SIZE + CELL_GAP)) - 1) {
+					let cell = simulator.cells[index.y + 1][index.x];
+					if (cell.value !== -1 && cell.value < minCell.value) {
+						minCell = cell;
+					}
+				}
+
+				path.push(minCell);
+				top = path[path.length - 1];
+			}
+			path[0].type = CellType.Target;
+
+			for (let i = 0; i < simulator.cells.length; i++) {
+				for (let j = 0; j < simulator.cells[i].length; j++) {
+					simulator.cells[i][j].isVisited = false;
+				}
+			}
+			simulator.renderCells();
+		}
+	}
 }
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-export let pathfinder = new Pathfinder(canvas);
+export let simulator = new Simualator(canvas);
 
 window.addEventListener("load", () => {
-	pathfinder.onload();
+	simulator.onload();
 });

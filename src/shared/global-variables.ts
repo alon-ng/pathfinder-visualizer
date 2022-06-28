@@ -6,6 +6,8 @@ export enum Color {
 	Black = "rgb(30, 30, 30)",
 	Red = "rgb(200, 0, 0)",
 	Green = "rgb(25, 130, 10)",
+	Aqua = "rgb(0, 210, 200)",
+	Gold = "rgb(200, 140, 20)",
 }
 
 export enum CellType {
@@ -13,6 +15,7 @@ export enum CellType {
 	Wall,
 	Start,
 	Target,
+	Path,
 }
 
 export enum Action {
