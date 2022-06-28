@@ -1,5 +1,5 @@
 import { Cell } from "./shared/Cell";
-import { CELL_SIZE, CELL_GAP } from "./shared/global-variables";
+import { CELL_SIZE, CELL_GAP, CellType } from "./shared/global-variables";
 
 class Pathfinder {
 	canvas: HTMLCanvasElement;
@@ -33,7 +33,7 @@ class Pathfinder {
 	handleMosueMove(event: MouseEvent) {
 		const cell = this.getClickedOnCell(event);
 		if (this.isMouseDown && cell) {
-			cell.isWall = true;
+			cell.type = CellType.Wall;
 			cell.render();
 		}
 	}
