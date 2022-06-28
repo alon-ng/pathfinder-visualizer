@@ -29,7 +29,10 @@ class Pathfinder {
 		this.target.type = CellType.Target;
 
 		canvas.addEventListener("mousemove", (event) => this.handleMosueMove(event));
-		canvas.addEventListener("mousedown", () => (this.isMouseDown = true));
+		canvas.addEventListener("mousedown", (event) => {
+			this.isMouseDown = true;
+			this.handleMosueMove(event);
+		});
 		canvas.addEventListener("mouseup", () => (this.isMouseDown = false));
 	}
 
