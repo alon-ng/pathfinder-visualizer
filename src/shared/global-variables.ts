@@ -16,8 +16,8 @@ export enum CellType {
 }
 
 export enum Action {
-	DrawWalls = "draw-walls",
+	DrawWalls = "create-walls",
 	SetStart = "set-start",
 	SetTarget = "set-target",
-	Clear = "clear",
+	Clear = "clear-walls",
 }
